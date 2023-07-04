@@ -17,9 +17,7 @@ app.post('/decks', async (req: Request, res: Response) => {
   res.json(createdDeck);
 });
 
-mongoose
-  .connect(`mongodb+srv://flashcardapp:${process.env.MONGODB_PASSWORD}@cluster0.plhpkb5.mongodb.net/?retryWrites=true&w=majority`)
-  .then(() => {
-    console.log(`Listening on PORT ${PORT}`);
-    app.listen(PORT);
-  });
+mongoose.connect(process.env.MONGODB_URL!).then(() => {
+  console.log(`Listening on PORT ${PORT}`);
+  app.listen(PORT);
+});
