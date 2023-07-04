@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './App.css';
-
-type Deck = {
-  _id: string;
-  title: string;
-};
+import { createDeck } from './api/createDeck';
+import { deleteDeck } from './api/deleteDeck';
+import { Deck, getDecks } from './api/getDecks';
 
 function App() {
   const [decks, setDecks] = useState<Deck[]>([]);
@@ -12,33 +11,39 @@ function App() {
 
   const handleCreateDeck = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await fetch('http://localhost:5000/decks', {
-      method: 'POST',
-      body: JSON.stringify({ title }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const newDeck = await createDeck(title);
+    setDecks([...decks, newDeck]);
     setTitle('');
   };
 
+  const handleDeleteDeck = async (deckId: string) => {
+    await deleteDeck(deckId);
+    setDecks(decks.filter((deck) => deck._id !== deckId));
+  };
+
   useEffect(() => {
-    (async () => {
-      const response = await fetch('http://localhost:5000/decks');
-      const newDecks = await response.json();
+    const fetchDecks = async () => {
+      const newDecks = await getDecks();
       setDecks(newDecks);
-    })();
+    };
+    fetchDecks();
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-8 max-w-7xl p-8 mx-0 my-auto bg-slate-200">
+    <div className="flex flex-col h-screen items-center gap-8 p-8 mx-0 my-auto bg-slate-200">
       <ul className="grid grid-cols-3 my-0 mx-auto w-[50rem] gap-[.625rem]">
         {decks.map((deck) => (
           <li
-            className="flex items-center justify-center h-[12rem] bg-slate-50 border rounded-3xl border-slate-400 hover:cursor-pointer hover:bg-white"
+            className="relative flex items-center justify-center h-[12rem] bg-white border rounded-3xl border-slate-400 hover:cursor-pointer"
             key={deck._id}
           >
-            {deck.title}
+            <button
+              onClick={() => handleDeleteDeck(deck._id)}
+              className="absolute top-2 right-2 rounded-full flex items-center justify-center w-6 z-10 hover:bg-slate-100"
+            >
+              X
+            </button>
+            <Link to={`/decks/${deck._id}`}>{deck.title}</Link>
           </li>
         ))}
       </ul>
@@ -64,7 +69,6 @@ function App() {
               }
             />
           </div>
-
           <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
             Create Deck
           </button>

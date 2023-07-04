@@ -4,7 +4,7 @@ import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import Deck from '../models/Deck';
 
-const PORT = 5000;
+export const PORT = 5000;
 
 const app = express();
 
@@ -22,6 +22,11 @@ app.post('/decks', async (req: Request, res: Response) => {
 app.get('/decks', async (req: Request, res: Response) => {
   const decks = await Deck.find({});
   res.json(decks);
+});
+
+app.delete('/decks/:deckId', async (req: Request, res: Response) => {
+  const deckToDelete = await Deck.findByIdAndDelete(req.params.deckId);
+  res.json(deckToDelete);
 });
 
 mongoose.connect(process.env.MONGODB_URL!).then(() => {
