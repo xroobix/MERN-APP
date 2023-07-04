@@ -1,8 +1,13 @@
 import cors from 'cors';
 import 'dotenv/config';
-import express, { Request, Response } from 'express';
+import express from 'express';
 import mongoose from 'mongoose';
-import Deck from '../models/Deck';
+import { createCardForDeckController } from './controllers/createCardForDeckController';
+import { createDeckController } from './controllers/createDeckController';
+import { deleteDeckController } from './controllers/deleteDeckController';
+import { getDeckController } from './controllers/getDeckController';
+import { getDecksController } from './controllers/getDecksController';
+import { deleteCardOnDeckController } from './controllers/deleteCardOnDeckController';
 
 export const PORT = 5000;
 
@@ -11,23 +16,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.post('/decks', async (req: Request, res: Response) => {
-  const newDeck = new Deck({
-    title: req.body.title,
-  });
-  const createdDeck = await newDeck.save();
-  res.json(createdDeck);
-});
-
-app.get('/decks', async (req: Request, res: Response) => {
-  const decks = await Deck.find({});
-  res.json(decks);
-});
-
-app.delete('/decks/:deckId', async (req: Request, res: Response) => {
-  const deckToDelete = await Deck.findByIdAndDelete(req.params.deckId);
-  res.json(deckToDelete);
-});
+app.post('/decks', createDeckController);
+app.get('/decks', getDecksController);
+app.get('/decks/:deckId', getDeckController);
+app.delete('/decks/:deckId', deleteDeckController);
+app.post('/decks/:deckId/cards', createCardForDeckController);
+app.delete('/decks/:deckId/cards/:index', deleteCardOnDeckController);
 
 mongoose.connect(process.env.MONGODB_URL!).then(() => {
   console.log(`Listening on PORT ${PORT}`);

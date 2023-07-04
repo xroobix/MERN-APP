@@ -31,6 +31,7 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen items-center gap-8 p-8 mx-0 my-auto bg-slate-200">
+      <h1 className='text-7xl font-bold'>Your deck</h1>
       <ul className="grid grid-cols-3 my-0 mx-auto w-[50rem] gap-[.625rem]">
         {decks.map((deck) => (
           <li
