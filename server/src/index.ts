@@ -4,16 +4,20 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { createCardForDeckController } from './controllers/createCardForDeckController';
 import { createDeckController } from './controllers/createDeckController';
+import { deleteCardOnDeckController } from './controllers/deleteCardOnDeckController';
 import { deleteDeckController } from './controllers/deleteDeckController';
 import { getDeckController } from './controllers/getDeckController';
 import { getDecksController } from './controllers/getDecksController';
-import { deleteCardOnDeckController } from './controllers/deleteCardOnDeckController';
 
 export const PORT = 5000;
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: 'https://flashcardapp-frontend.onrender.com',
+  })
+);
 app.use(express.json());
 
 app.post('/decks', createDeckController);
