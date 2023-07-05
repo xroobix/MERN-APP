@@ -13,11 +13,11 @@
 
 ### How to setup
 
-- Run Vite
+- Run Vite: 
 Move to client directory
   `pnpm run dev`
 
-- Run Express
+- Run Express: 
 Move to server directory
   `pnpm run dev`
 
@@ -31,6 +31,7 @@ Move to server directory
 ### Built with
 
 - TypeScript
+- [TailwindCSS](https://tailwindcss.com) - A utility-first CSS framework
 - [React](https://reactjs.org/) - JS library
 - [Vite.js](https://vitejs.dev) - Frontend Tooling
 - [Express.js](https://expressjs.com) - Fast, unopinionated, minimalist web framework for Node.js
